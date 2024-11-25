@@ -23,6 +23,7 @@
  */
 
 require_once('../../config.php');
+require_once($CFG->dirroot. '/local/greetings/lib.php');
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -31,10 +32,26 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title($SITE->fullname);
 $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
 
+$pathlist = optional_param('path', '', PARAM_RAW);
+$exclude = optional_param('exclude', '', PARAM_NOTAGS);
+$includewarnings = optional_param('includewarnings', true, PARAM_BOOL);
+$showstandard = optional_param('showstandard', false, PARAM_BOOL);
+
+
+
 echo $OUTPUT->header();
+
 if (isloggedin()) {
-    echo '<h3>Greetings, ' . fullname($USER) . '</h3>';
+    echo local_greetings_get_greeting($USER);
 } else {
-    echo '<h3>Greetings, user</h3>';
+    echo get_string('greetinguser', 'local_greetings');
 }
+
+$now = time();
+echo userdate($now);
+
+$date = new DateTime("tomorrow", core_date::get_user_timezone_object());
+$date->setTime(0, 0, 0);
+echo userdate($date->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig'));
+
 echo $OUTPUT->footer();

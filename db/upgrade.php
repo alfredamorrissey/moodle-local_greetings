@@ -15,21 +15,25 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Provides the {@see xmldb_local_greetings_upgrade()} function.
  *
  * @package     local_greetings
- * @category    string
+ * @category    upgrade
  * @copyright   2024 Alfreda Morrissey <alfredamorrissey@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$string['greetingloggedinuser'] = 'Greetings, {$a}.';
-$string['greetinguser'] = 'Greetings, user.';
-$string['greetinguserau'] = 'Hello, {$a}.';
-$string['greetinguseres'] = 'Hola, {$a}.';
-$string['greetinguserfj'] = 'Bula, {$a}.';
-$string['greetingusernz'] = 'Kia Ora, {$a}.';
-$string['pluginname'] = 'Greetings';
-
+/**
+ * Define upgrade steps to be performed to upgrade the plugin from the old version to the current one.
+ *
+ * @param int $oldversion Version number the plugin is being upgraded from.
+ */
+function xmldb_local_greetings_upgrade($oldversion) {
+    if ($oldversion < 2022092800) {
+        // Here goes the code that needs to be executed.
+        set_config('foo', 'bar', 'local_greetings');
+        upgrade_plugin_savepoint(true, 2022092800, 'local', 'greetings');
+    }
+    return true;
+}
